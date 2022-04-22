@@ -171,9 +171,15 @@ feature_engineering_df <- function( df) {
                 'fe_average_token_length'  , 'fe_num_videos' , 'fe_num_hrefs' , 'fe_num_self_hrefs' )
   flag_vars <- c( flag_vars , 'f_average_token_length' , 'f_num_hrefs' , 'f_num_self_hrefs' )
   
-  clean_df <- df %>% 
-    select( all_of( c( "article_id" , fe_vars , flag_vars ) ) ) %>% 
-    mutate_if( is.character , as.factor )
+  if ( "is_popular" %in% names(df) ) {
+    clean_df <- df %>% 
+      select( all_of( c( "article_id" , "is_popular" , fe_vars , flag_vars ) ) ) %>% 
+      mutate_if( is.character , as.factor )
+  } else {
+    clean_df <- df %>% 
+      select( all_of( c( "article_id" , fe_vars , flag_vars ) ) ) %>% 
+      mutate_if( is.character , as.factor )
+  }
   
   return(clean_df)
 }
